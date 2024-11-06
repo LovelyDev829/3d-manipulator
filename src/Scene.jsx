@@ -3,67 +3,66 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, TransformControls } from '@react-three/drei';
 import { ModelComponent } from './ModelComponent';
 
+const models = [
+  '/models/finalParts/Bumper.glb',
+  '/models/finalParts/FastenerTrim.glb',
+  '/models/finalParts/FloorPanel.glb',
+  '/models/finalParts/HexBolt.glb',
+  '/models/finalParts/HexSocket.glb',
+  '/models/finalParts/InstrumentPanel.glb',
+  '/models/finalParts/Insulator.glb',
+  '/models/finalParts/LeftDoor.glb',
+  '/models/finalParts/LeftRoofRail.glb',
+  '/models/finalParts/LeftSidePanel.glb',
+  '/models/finalParts/LeftSideRail.glb',
+  '/models/finalParts/Nut.glb',
+  '/models/finalParts/Pipe.glb',
+  '/models/finalParts/RightDoor.glb',
+  '/models/finalParts/RightRoofRail.glb',
+  '/models/finalParts/RightSidePanel.glb',
+  '/models/finalParts/RightSideRail.glb',
+  '/models/finalParts/Roof.glb',
+  '/models/finalParts/SeatAssy.glb',
+  '/models/finalParts/SrewBolt.glb',
+  '/models/finalParts/Washer.glb',
+  '/models/finalParts/Wheel.glb',
+  '/models/finalParts/WheelInsulator.glb',
+  '/models/finalParts/WindScreen.glb'
+];
+
 export default function Scene() {
   const [selected, setSelected] = useState(null);
   const [controlsEnabled, setControlsEnabled] = useState(true);
-  const [controlMode, setControlMode] = useState("translate"); // Default to translate
-  const model01Ref = useRef();
-  const model02Ref = useRef();
-  const model03Ref = useRef();
-  const model04Ref = useRef();
-  const model05Ref = useRef();
-  const model06Ref = useRef();
-  const model07Ref = useRef();
-  const model08Ref = useRef();
-  const model09Ref = useRef();
-  const model10Ref = useRef();
-  const model11Ref = useRef();
-  const model12Ref = useRef();
-  const model13Ref = useRef();
-  const model14Ref = useRef();
-  const model15Ref = useRef();
-  const model16Ref = useRef();
-  const model17Ref = useRef();
-  const model18Ref = useRef();
-  const model19Ref = useRef();
-  const model20Ref = useRef();
-  const model21Ref = useRef();
-  const model22Ref = useRef();
-  const model23Ref = useRef();
-  const model24Ref = useRef();
+  const [controlMode, setControlMode] = useState("translate");
+  
+  const modelRefs = useRef(Array(models.length).fill().map(() => React.createRef()));
 
-  // Click handler for model selection
-  const handleModelClick = (model, event) => {
+  const handleModelClick = (modelRef, event) => {
     event.stopPropagation();
-    setSelected(model);
+    setSelected(modelRef.current);
   };
 
-  // Snap rotation to the nearest 90 degrees
   const snapRotation = (object) => {
     object.rotation.x = Math.round(object.rotation.x / (Math.PI / 2)) * (Math.PI / 2);
     object.rotation.y = Math.round(object.rotation.y / (Math.PI / 2)) * (Math.PI / 2);
     object.rotation.z = Math.round(object.rotation.z / (Math.PI / 2)) * (Math.PI / 2);
   };
 
-  // Handle key down events
   const handleKeyDown = (event) => {
     if (event.key === "Shift") {
-      setControlMode("rotate"); // Change to rotate mode when Shift is pressed
+      setControlMode("rotate");
     }
   };
 
-  // Handle key up events
   const handleKeyUp = (event) => {
     if (event.key === "Shift") {
-      setControlMode("translate"); // Revert back to translate mode when Shift is released
+      setControlMode("translate");
     }
   };
 
-  // Add event listeners for keydown and keyup
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
@@ -72,60 +71,38 @@ export default function Scene() {
 
   return (
     <Canvas style={{ width: '100vw', height: '100vh' }}>
-      {/* Lights */}
-      <ambientLight intensity={1.25} /> {/* Soft ambient light */}
-      <directionalLight position={[2, 1.25, 5]} intensity={0.7} /> {/* Directional light */}
-      <directionalLight position={[0, -1.25, 5]} intensity={0.7} /> {/* Additional directional light */}
-      <directionalLight position={[0, -1.25, -5]} intensity={0.7} /> {/* Another directional light */}
-      <pointLight position={[0, 4, 0]} intensity={0.5} /> {/* Point light */}
-      <pointLight position={[-4, 2, 0]} intensity={0.5} /> {/* Additional point light */}
-
-      {/* Orbit Controls */}
+      <ambientLight intensity={0.25} />
+      <directionalLight position={[2, 1.25, 5]} intensity={1.7} />
+      <directionalLight position={[0, -1.25, 5]} intensity={1.7} />
+      <directionalLight position={[0, -1.25, -5]} intensity={1.7} />
+      <pointLight position={[0, 4, 0]} intensity={1.5} />
+      <pointLight position={[-4, 2, 0]} intensity={1.5} />
+      
       <OrbitControls enabled={controlsEnabled} />
-
-      {/* Transform Controls */}
+      
       {selected && (
         <TransformControls
           object={selected}
-          mode={controlMode} // Use the current control mode
-          onMouseDown={() => setControlsEnabled(false)} // Disable OrbitControls when moving starts
+          mode={controlMode}
+          onMouseDown={() => setControlsEnabled(false)}
           onMouseUp={() => {
             if (controlMode === "rotate") {
-              snapRotation(selected); // Snap rotation on mouse release
+              snapRotation(selected);
             }
-            setControlsEnabled(true); // Re-enable OrbitControls after moving or rotating
+            setControlsEnabled(true);
           }}
         />
       )}
 
-      {/* Models with individual click handlers */}
-      <ModelComponent path="/models/finalParts/Bumper.glb" ref={model01Ref} onClick={(e) => handleModelClick(model01Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/FastenerTrim.glb" ref={model02Ref} onClick={(e) => handleModelClick(model02Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/FloorPanel.glb" ref={model03Ref} onClick={(e) => handleModelClick(model03Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/HexBolt.glb" ref={model04Ref} onClick={(e) => handleModelClick(model04Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/HexSocket.glb" ref={model05Ref} onClick={(e) => handleModelClick(model05Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/InstrumentPanel.glb" ref={model06Ref} onClick={(e) => handleModelClick(model06Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Insulator.glb" ref={model07Ref} onClick={(e) => handleModelClick(model07Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/LeftDoor.glb" ref={model08Ref} onClick={(e) => handleModelClick(model08Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/LeftRoofRail.glb" ref={model09Ref} onClick={(e) => handleModelClick(model09Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/LeftSidePanel.glb" ref={model10Ref} onClick={(e) => handleModelClick(model10Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/LeftSideRail.glb" ref={model11Ref} onClick={(e) => handleModelClick(model11Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Nut.glb" ref={model12Ref} onClick={(e) => handleModelClick(model12Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Pipe.glb" ref={model13Ref} onClick={(e) => handleModelClick(model13Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/RightDoor.glb" ref={model14Ref} onClick={(e) => handleModelClick(model14Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/RightRoofRail.glb" ref={model15Ref} onClick={(e) => handleModelClick(model15Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/RightSidePanel.glb" ref={model16Ref} onClick={(e) => handleModelClick(model16Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/RightSideRail.glb" ref={model17Ref} onClick={(e) => handleModelClick(model17Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Roof.glb" ref={model18Ref} onClick={(e) => handleModelClick(model18Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/SeatAssy.glb" ref={model19Ref} onClick={(e) => handleModelClick(model19Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/SrewBolt.glb" ref={model20Ref} onClick={(e) => handleModelClick(model20Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Washer.glb" ref={model21Ref} onClick={(e) => handleModelClick(model21Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/Wheel.glb" ref={model22Ref} onClick={(e) => handleModelClick(model22Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/WheelInsulator.glb" ref={model23Ref} onClick={(e) => handleModelClick(model23Ref.current, e)} />
-      <ModelComponent path="/models/finalParts/WindScreen.glb" ref={model24Ref} onClick={(e) => handleModelClick(model24Ref.current, e)} />
-      
+      {models.map((path, index) => (
+        <ModelComponent
+          key={path}
+          path={path}
+          ref={modelRefs.current[index]}
+          onClick={(e) => handleModelClick(modelRefs.current[index], e)}
+        />
+      ))}
 
-      {/* Background plane for deselection */}
       <mesh position={[0, 0, -5]}>
         <planeGeometry args={[100, 100]} />
         <meshBasicMaterial transparent opacity={0} onClick={() => setSelected(null)} />
