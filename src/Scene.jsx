@@ -4,30 +4,31 @@ import { OrbitControls, TransformControls } from '@react-three/drei';
 import { ModelComponent } from './ModelComponent';
 
 const models = [
-  '/models/finalParts/Bumper.glb',
-  '/models/finalParts/FastenerTrim.glb',
-  '/models/finalParts/FloorPanel.glb',
-  '/models/finalParts/HexBolt.glb',
-  '/models/finalParts/HexSocket.glb',
-  '/models/finalParts/InstrumentPanel.glb',
-  '/models/finalParts/Insulator.glb',
-  '/models/finalParts/LeftDoor.glb',
-  '/models/finalParts/LeftRoofRail.glb',
-  '/models/finalParts/LeftSidePanel.glb',
-  '/models/finalParts/LeftSideRail.glb',
-  '/models/finalParts/Nut.glb',
-  '/models/finalParts/Pipe.glb',
-  '/models/finalParts/RightDoor.glb',
-  '/models/finalParts/RightRoofRail.glb',
-  '/models/finalParts/RightSidePanel.glb',
-  '/models/finalParts/RightSideRail.glb',
-  '/models/finalParts/Roof.glb',
-  '/models/finalParts/SeatAssy.glb',
-  '/models/finalParts/SrewBolt.glb',
-  '/models/finalParts/Washer.glb',
-  '/models/finalParts/Wheel.glb',
-  '/models/finalParts/WheelInsulator.glb',
-  '/models/finalParts/WindScreen.glb'
+  { first: [9,0,0,0,0,0],    last: [0,0,0,0,0,0], path: '/models/finalParts/Bumper.glb' },
+  // { first: [-12,-3,0,0,2,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/Bumper.glb' },
+  { first: [4,6,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/FastenerTrim.glb' },
+  { first: [0,0,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/FloorPanel.glb' },
+  { first: [-9.6,0,0,0,0,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/HexBolt.glb' },
+  { first: [-10.3,0,0,0,0,0], last: [0,0,0,0,0,0], path: '/models/finalParts/HexSocket.glb' },
+  { first: [7,1,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/InstrumentPanel.glb' },
+  { first: [-7,0,0,0,0,0],    last: [0,0,0,0,0,0], path: '/models/finalParts/Insulator.glb' },
+  { first: [5,0,-5,-1,0,0],   last: [0,0,0,0,0,0], path: '/models/finalParts/LeftDoor.glb' },
+  { first: [1,0,-6,0,0,0],    last: [0,0,0,0,0,0], path: '/models/finalParts/LeftRoofRail.glb' },
+  { first: [0,0,-4,-1,0,0],   last: [0,0,0,0,0,0], path: '/models/finalParts/LeftSidePanel.glb' },
+  { first: [0,0,-2.5,0,0,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/LeftSideRail.glb' },
+  { first: [-8.4,0,0,0,0,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/Nut.glb' },
+  { first: [-5,-2,0,0,0,0],   last: [0,0,0,0,0,0], path: '/models/finalParts/Pipe.glb' },
+  { first: [5,0,5,1,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/RightDoor.glb' },
+  { first: [1,0,6,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/RightRoofRail.glb' },
+  { first: [0,0,4,1,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/RightSidePanel.glb' },
+  { first: [0,0,2.5,0,0,0],   last: [0,0,0,0,0,0], path: '/models/finalParts/RightSideRail.glb' },
+  { first: [4,5,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/Roof.glb' },
+  { first: [5,1,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/SeatAssy.glb' },
+  { first: [-9,0,0,0,0,0],    last: [0,0,0,0,0,0], path: '/models/finalParts/SrewBolt.glb' },
+  { first: [-7.7,0,0,0,0,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/Washer.glb' },
+  { first: [-5,0,0,0,0,0],    last: [0,0,0,0,0,0], path: '/models/finalParts/Wheel.glb' },
+  { first: [-6.1,0,0,0,0,0],  last: [0,0,0,0,0,0], path: '/models/finalParts/WheelInsulator.glb' },
+  { first: [9,3,0,0,0,0],     last: [0,0,0,0,0,0], path: '/models/finalParts/WindScreen.glb' }  
 ];
 
 export default function Scene() {
@@ -94,12 +95,13 @@ export default function Scene() {
         />
       )}
 
-      {models.map((path, index) => (
+      {models.map((model, index) => (
         <ModelComponent
-          key={path}
-          path={path}
+          key={'model-'+index}
+          path={model.path}
           ref={modelRefs.current[index]}
           onClick={(e) => handleModelClick(modelRefs.current[index], e)}
+          position={model.first}
         />
       ))}
 
